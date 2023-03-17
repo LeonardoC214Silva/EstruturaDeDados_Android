@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
@@ -59,6 +61,9 @@ public class BinaryTreeActivity extends AppCompatActivity {
         txt=findViewById(R.id.entrada);
         clickButtons=stateUser.insert;
 
+        ///configurando cor inicial dos botoes
+        atualizaBotoes();
+
         //tratamento do botao de layout inserir
         btnInsert.setOnClickListener(view -> {
 
@@ -78,10 +83,11 @@ public class BinaryTreeActivity extends AppCompatActivity {
                 clickButtons= stateUser.insert;
             }
 
-
+            atualizaBotoes();
         });
         //tratamento do botao de layoutremover
         btnRemove.setOnClickListener(view -> {
+
             if(clickButtons==stateUser.remove){
                 clickButtons=stateUser.none;
                 linearLayout.setVisibility(View.GONE);
@@ -97,16 +103,20 @@ public class BinaryTreeActivity extends AppCompatActivity {
                 }
                 clickButtons= stateUser.remove;
             }
+            atualizaBotoes();
         });
         //tratamento do botao de layout de pesquisa
         btnSearch.setOnClickListener(view -> {
+
             if(clickButtons==stateUser.search){
                 clickButtons=stateUser.none;
+                btnSearch.setBackgroundColor(Color.CYAN);
                 linearLayout.setVisibility(View.GONE);
                 node.desenhar();
 
             }else{
                 if(clickButtons==stateUser.none){
+                    btnSearch.setBackgroundColor(Color.BLUE);
                     linearLayout.setVisibility(View.VISIBLE);
                 }
                 if(btnMin.getVisibility()==View.GONE){
@@ -115,6 +125,7 @@ public class BinaryTreeActivity extends AppCompatActivity {
                 }
                 clickButtons= stateUser.search;
             }
+            atualizaBotoes();
         });
         //parte com o tratamento das interações com a arvore referente a manipulação dela
         btnOK.setOnClickListener(view -> {
@@ -140,6 +151,34 @@ public class BinaryTreeActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float x,y;
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                node.posx=event.getX();
+                node.posy=event.getY();
+                break;
+           // case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_MOVE:
+                x=event.getX()-node.posx;
+                y=event.getY()-node.posy;
+                if(y!=0){
+                    node.posy= event.getY();
+                    node.updatePosyArvore((int)y);
+                }
+
+                if(x!=0){
+                    node.posx=event.getX();
+                    node.updatePosxArvore((int)x);
+                }
+                node.desenhar();
+                break;
+        }
+
+        return super.onTouchEvent(event);
+    }
+
+    @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         outState.putSerializable(TREESTATE, node);
 
@@ -162,5 +201,21 @@ public class BinaryTreeActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    public void atualizaBotoes(){
+        btnInsert.setBackgroundColor(Color.BLUE);
+        btnSearch.setBackgroundColor(Color.BLUE);
+        btnRemove.setBackgroundColor(Color.BLUE);
+        switch (clickButtons){
+            case search:
+                btnSearch.setBackgroundColor(Color.GRAY);
+                break;
+            case remove:
+                btnRemove.setBackgroundColor(Color.GRAY);
+                break;
+            case insert:
+                btnInsert.setBackgroundColor(Color.GRAY);
+                break;
+        }
     }
 }

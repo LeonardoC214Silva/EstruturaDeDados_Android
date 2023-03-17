@@ -21,6 +21,7 @@ public class ScreenBinTree implements SurfaceHolder.Callback, Serializable {
     private binTree arvore,aux;
     SurfaceHolder surfaceHolder;
     Canvas canvas;
+    float posx,posy;
 
     public binTree getArvore() {
         return arvore;
@@ -80,7 +81,14 @@ public class ScreenBinTree implements SurfaceHolder.Callback, Serializable {
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
 
     }
-
+    public void updatePosxArvore(int valor){
+        arvore.setPosx(arvore.getPosx()+valor);
+       // arvore.draw();
+    }
+    public void updatePosyArvore(int valor){
+        arvore.setPosy(arvore.getPosy()+valor);
+        //arvore.draw();
+    }
     public  void desenhar(){
         arvore.setOption(0);
         new Thread(arvore).start();
@@ -100,4 +108,5 @@ public class ScreenBinTree implements SurfaceHolder.Callback, Serializable {
         arvore.setOption(1);
         new Thread(arvore).start();
     }
+
 }

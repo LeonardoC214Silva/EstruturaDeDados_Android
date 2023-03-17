@@ -18,12 +18,30 @@ public class binTree implements Runnable  {
     private Paint paint;
     private int keyaux;
     private HashMap<colors,Integer> estates = new HashMap<colors,Integer>();
+
+    public int getPosx() {
+        return posx;
+    }
+
+    public void setPosx(int posx) {
+        this.posx = posx;
+    }
+
+    public int getPosy() {
+        return posy;
+    }
+
+    public void setPosy(int posy) {
+        this.posy = posy;
+    }
+
     private enum colors {white,blue,yellow,red,black,green}
     private int widht;
     private int option;
     private Canvas canvas;
     private SurfaceHolder surfaceHolder;
-
+    private int posx;
+    private int posy;
     public void setWidht(int widht) {
         this.widht = widht;
     }
@@ -301,6 +319,8 @@ public class binTree implements Runnable  {
         running=false;
         option=0;
         root=null;
+        posx=widht/2-tam/2;
+        posy=20;
         this.widht=widht;
         circlue = new ShapeDrawable(new OvalShape());
         estates.put(colors.white,0xffffffff);
@@ -353,7 +373,7 @@ public class binTree implements Runnable  {
         canvas=surfaceHolder.lockCanvas();
         //set background
         canvas.drawRGB( 219,173 , 34);
-        recDraw(n, widht/2-tam/2, 20,widht/4);
+        recDraw(n, posx, posy,widht/4);
         surfaceHolder.unlockCanvasAndPost(canvas);
     }
     private void recDraw(Node n,int posX,int posY,int dist){
